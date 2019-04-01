@@ -28,7 +28,7 @@ namespace ListAll.Controllers
         }
 
         // GET: ListItems/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -62,7 +62,6 @@ namespace ListAll.Controllers
         {
             if (ModelState.IsValid)
             {
-                listItem.Id = Guid.NewGuid();
                 _context.Add(listItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -72,7 +71,7 @@ namespace ListAll.Controllers
         }
 
         // GET: ListItems/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -93,7 +92,7 @@ namespace ListAll.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ListId,Name,Description,_InsertDate,_DeleteDate")] ListItem listItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ListId,Name,Description,_InsertDate,_DeleteDate")] ListItem listItem)
         {
             if (id != listItem.Id)
             {
@@ -125,7 +124,7 @@ namespace ListAll.Controllers
         }
 
         // GET: ListItems/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -146,7 +145,7 @@ namespace ListAll.Controllers
         // POST: ListItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var listItem = await _context.ListItem.FindAsync(id);
             _context.ListItem.Remove(listItem);
@@ -154,7 +153,7 @@ namespace ListAll.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ListItemExists(Guid id)
+        private bool ListItemExists(int id)
         {
             return _context.ListItem.Any(e => e.Id == id);
         }

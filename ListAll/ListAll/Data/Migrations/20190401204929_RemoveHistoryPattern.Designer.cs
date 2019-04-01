@@ -4,20 +4,52 @@ using ListAll.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ListAll.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190401204929_RemoveHistoryPattern")]
+    partial class RemoveHistoryPattern
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ListAll.Models.List", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("List");
+                });
+
+            modelBuilder.Entity("ListAll.Models.ListItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<Guid>("ListId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.ToTable("ListItem");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -194,9 +226,6 @@ namespace ListAll.Data.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<int>("Kind");
 
                     b.Property<string>("RowId")
@@ -210,33 +239,14 @@ namespace ListAll.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AutoHistory");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AutoHistory");
-                });
-
-            modelBuilder.Entity("ListAll.Models.List", b =>
-                {
-                    b.HasBaseType("Microsoft.EntityFrameworkCore.AutoHistory");
-
-                    b.Property<string>("Name");
-
-                    b.HasDiscriminator().HasValue("List");
                 });
 
             modelBuilder.Entity("ListAll.Models.ListItem", b =>
                 {
-                    b.HasBaseType("Microsoft.EntityFrameworkCore.AutoHistory");
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("ListId");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("ListItem_Name");
-
-                    b.HasIndex("ListId");
-
-                    b.HasDiscriminator().HasValue("ListItem");
+                    b.HasOne("ListAll.Models.List", "List")
+                        .WithMany()
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -281,14 +291,6 @@ namespace ListAll.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ListAll.Models.ListItem", b =>
-                {
-                    b.HasOne("ListAll.Models.List", "List")
-                        .WithMany("ListItems")
-                        .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace ListAll.Models
 {
-    public class ListItem : HistoryPatern
-    {
-        public Guid Id { get; set; }
-
+    public class ListItem : AutoHistory
+	{
         [Display(Name = "List")]
-        public Guid ListId { get; set; }
+        public int ListId { get; set; }
 
         [ForeignKey(nameof(ListId))]
         public List List { get; set; }

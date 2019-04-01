@@ -18,10 +18,14 @@ namespace ListAll.Data
 
         public DbSet<ListItem> ListItem { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // enable auto history functionality.
-            modelBuilder.EnableAutoHistory();
-        }
-    }
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			// enable auto history functionality.
+			modelBuilder.EnableAutoHistory(int.MaxValue);
+
+			modelBuilder.Entity<>
+		}
+	}
 }
