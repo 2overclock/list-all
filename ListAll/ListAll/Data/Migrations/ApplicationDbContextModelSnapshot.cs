@@ -15,9 +15,72 @@ namespace ListAll.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ListAll.Data.AutoHistory.HistoryChanges", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Changed");
+
+                    b.Property<int>("EntityState");
+
+                    b.Property<string>("RowId")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("TableName")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HistoryChanges");
+                });
+
+            modelBuilder.Entity("ListAll.Models.List", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("List");
+                });
+
+            modelBuilder.Entity("ListAll.Models.ListItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<Guid>("ListId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.ToTable("ListItem");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -32,6 +95,10 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -55,6 +122,10 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired();
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -101,6 +172,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -127,6 +202,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired();
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -147,6 +226,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired();
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
@@ -159,6 +242,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<string>("RoleId");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -179,64 +266,21 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("Value");
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Microsoft.EntityFrameworkCore.AutoHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Changed");
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<int>("Kind");
-
-                    b.Property<string>("RowId")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("TableName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AutoHistory");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AutoHistory");
-                });
-
-            modelBuilder.Entity("ListAll.Models.List", b =>
-                {
-                    b.HasBaseType("Microsoft.EntityFrameworkCore.AutoHistory");
-
-                    b.Property<string>("Name");
-
-                    b.HasDiscriminator().HasValue("List");
-                });
-
             modelBuilder.Entity("ListAll.Models.ListItem", b =>
                 {
-                    b.HasBaseType("Microsoft.EntityFrameworkCore.AutoHistory");
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("ListId");
-
-                    b.Property<string>("Name")
-                        .HasColumnName("ListItem_Name");
-
-                    b.HasIndex("ListId");
-
-                    b.HasDiscriminator().HasValue("ListItem");
+                    b.HasOne("ListAll.Models.List", "List")
+                        .WithMany("ListItems")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -281,14 +325,6 @@ namespace ListAll.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ListAll.Models.ListItem", b =>
-                {
-                    b.HasOne("ListAll.Models.List", "List")
-                        .WithMany("ListItems")
-                        .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

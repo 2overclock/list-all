@@ -11,15 +11,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20190401134032_ListSchema.cs" />
+    <Compile Remove="Data\Migrations\20190401134032_ListSchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190401134250_UpdateListSchema.cs" />
+    <Compile Remove="Data\Migrations\20190401134250_UpdateListSchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190401135216_UpdateListItem.cs" />
+    <Compile Remove="Data\Migrations\20190401135216_UpdateListItem.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190401203534_AddAutoHistory.cs" />
+    <Compile Remove="Data\Migrations\20190401203534_AddAutoHistory.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190401204929_RemoveHistoryPattern.cs" />
+    <Compile Remove="Data\Migrations\20190401204929_RemoveHistoryPattern.Designer.cs" />
     <Compile Remove="Data\Migrations\20190401205502_AddAutoHistoryInheritance.cs" />
     <Compile Remove="Data\Migrations\20190401205502_AddAutoHistoryInheritance.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190401205911_AutoHistoryInheritance.cs" />
+    <Compile Remove="Data\Migrations\20190401205911_AutoHistoryInheritance.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190402084933_RemoveCascadeDeleteOnListItem.cs" />
+    <Compile Remove="Data\Migrations\20190402084933_RemoveCascadeDeleteOnListItem.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190402085219_RemoveCascadeDeleteFromList.cs" />
+    <Compile Remove="Data\Migrations\20190402085219_RemoveCascadeDeleteFromList.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190402091002_InitialListSchema.cs" />
+    <Compile Remove="Data\Migrations\20190402091002_InitialListSchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190402093904_EnsureAutoHistory.cs" />
+    <Compile Remove="Data\Migrations\20190402093904_EnsureAutoHistory.Designer.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.AutoHistory" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ListAll.Data;
 using ListAll.Models;
-using System.Reflection;
 
 namespace ListAll.Controllers
 {
@@ -28,7 +27,7 @@ namespace ListAll.Controllers
         }
 
         // GET: ListItems/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -49,7 +48,7 @@ namespace ListAll.Controllers
         // GET: ListItems/Create
         public IActionResult Create()
         {
-            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name));
+            ViewData["ListId"] = new SelectList(_context.List, "Id", "Id");
             return View();
         }
 
@@ -58,20 +57,21 @@ namespace ListAll.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ListId,Name,Description,_InsertDate,_DeleteDate")] ListItem listItem)
+        public async Task<IActionResult> Create([Bind("Id,ListId,Name,Description")] ListItem listItem)
         {
             if (ModelState.IsValid)
             {
+                listItem.Id = Guid.NewGuid();
                 _context.Add(listItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), listItem.ListId);
+            ViewData["ListId"] = new SelectList(_context.List, "Id", "Id", listItem.ListId);
             return View(listItem);
         }
 
         // GET: ListItems/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -83,7 +83,7 @@ namespace ListAll.Controllers
             {
                 return NotFound();
             }
-            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), listItem.ListId);
+            ViewData["ListId"] = new SelectList(_context.List, "Id", "Id", listItem.ListId);
             return View(listItem);
         }
 
@@ -92,7 +92,7 @@ namespace ListAll.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ListId,Name,Description,_InsertDate,_DeleteDate")] ListItem listItem)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ListId,Name,Description")] ListItem listItem)
         {
             if (id != listItem.Id)
             {
@@ -119,12 +119,12 @@ namespace ListAll.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), listItem.ListId);
+            ViewData["ListId"] = new SelectList(_context.List, "Id", "Id", listItem.ListId);
             return View(listItem);
         }
 
         // GET: ListItems/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -145,7 +145,7 @@ namespace ListAll.Controllers
         // POST: ListItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var listItem = await _context.ListItem.FindAsync(id);
             _context.ListItem.Remove(listItem);
@@ -153,7 +153,7 @@ namespace ListAll.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ListItemExists(int id)
+        private bool ListItemExists(Guid id)
         {
             return _context.ListItem.Any(e => e.Id == id);
         }

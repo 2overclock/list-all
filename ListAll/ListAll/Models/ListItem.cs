@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace ListAll.Models
 {
-    public class ListItem : AutoHistory
-	{
+    public class ListItem
+    {
+        public Guid Id { get; set; }
+
         [Display(Name = "List")]
-        public int ListId { get; set; }
+        public Guid ListId { get; set; }
 
         [ForeignKey(nameof(ListId))]
         public List List { get; set; }

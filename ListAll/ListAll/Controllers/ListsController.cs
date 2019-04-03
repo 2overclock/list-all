@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ListAll.Data;
 using ListAll.Models;
+using ListAll.Data.AutoHistory;
 
 namespace ListAll.Controllers
 {
@@ -26,7 +27,7 @@ namespace ListAll.Controllers
         }
 
         // GET: Lists/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -58,6 +59,7 @@ namespace ListAll.Controllers
         {
             if (ModelState.IsValid)
             {
+                list.Id = Guid.NewGuid();
                 _context.Add(list);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -66,7 +68,7 @@ namespace ListAll.Controllers
         }
 
         // GET: Lists/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +88,7 @@ namespace ListAll.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] List list)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] List list)
         {
             if (id != list.Id)
             {
@@ -117,7 +119,7 @@ namespace ListAll.Controllers
         }
 
         // GET: Lists/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -137,7 +139,7 @@ namespace ListAll.Controllers
         // POST: Lists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var list = await _context.List.FindAsync(id);
             _context.List.Remove(list);
@@ -145,7 +147,7 @@ namespace ListAll.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ListExists(int id)
+        private bool ListExists(Guid id)
         {
             return _context.List.Any(e => e.Id == id);
         }

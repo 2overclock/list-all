@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListAll.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190401135216_UpdateListItem")]
-    partial class UpdateListItem
+    [Migration("20190402105616_CreateListSchema")]
+    partial class CreateListSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,10 +28,6 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<DateTime?>("_DeleteDate");
-
-                    b.Property<DateTime>("_InsertDate");
-
                     b.HasKey("Id");
 
                     b.ToTable("List");
@@ -47,10 +43,6 @@ namespace ListAll.Data.Migrations
                     b.Property<Guid>("ListId");
 
                     b.Property<string>("Name");
-
-                    b.Property<DateTime?>("_DeleteDate");
-
-                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -227,7 +219,7 @@ namespace ListAll.Data.Migrations
             modelBuilder.Entity("ListAll.Models.ListItem", b =>
                 {
                     b.HasOne("ListAll.Models.List", "List")
-                        .WithMany()
+                        .WithMany("ListItems")
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

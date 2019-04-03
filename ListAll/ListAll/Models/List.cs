@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace ListAll.Models
 {
-    public class List : AutoHistory
+    public class List
     {
+        public Guid Id { get; set; }
+
         public string Name { get; set; }
 
 		public List<ListItem> ListItems { get; set; }

@@ -2,9 +2,6 @@
 
 @{
     ViewData["Title"] = "Create";
-
-    var lists = (SelectList)ViewBag.ListId;
-    var isListsEmpty = lists.Count() == 0;
 }
 
 <h1>Create</h1>
@@ -17,11 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ListId" class="control-label"></label>
-                <select asp-for="ListId" class="form-control" asp-items="lists" disabled="@(isListsEmpty)"></select>
-                @if (isListsEmpty)
-                {
-                    <a asp-area="" asp-controller="Lists" asp-action="Create">Create New List</a>
-                }
+                <select asp-for="ListId" class ="form-control" asp-items="ViewBag.ListId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
