@@ -2,44 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-ListAll-50B2BA73-C931-4B4F-9720-394E09C0EAB4</UserSecretsId>
+    <UserSecretsId>aspnet-ListAll-B8BCB64A-69FF-4346-B482-B4AE24593F1F</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20190401134032_ListSchema.cs" />
-    <Compile Remove="Data\Migrations\20190401134032_ListSchema.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190401134250_UpdateListSchema.cs" />
-    <Compile Remove="Data\Migrations\20190401134250_UpdateListSchema.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190401135216_UpdateListItem.cs" />
-    <Compile Remove="Data\Migrations\20190401135216_UpdateListItem.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190401203534_AddAutoHistory.cs" />
-    <Compile Remove="Data\Migrations\20190401203534_AddAutoHistory.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190401204929_RemoveHistoryPattern.cs" />
-    <Compile Remove="Data\Migrations\20190401204929_RemoveHistoryPattern.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190401205502_AddAutoHistoryInheritance.cs" />
-    <Compile Remove="Data\Migrations\20190401205502_AddAutoHistoryInheritance.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190401205911_AutoHistoryInheritance.cs" />
-    <Compile Remove="Data\Migrations\20190401205911_AutoHistoryInheritance.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190402084933_RemoveCascadeDeleteOnListItem.cs" />
-    <Compile Remove="Data\Migrations\20190402084933_RemoveCascadeDeleteOnListItem.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190402085219_RemoveCascadeDeleteFromList.cs" />
-    <Compile Remove="Data\Migrations\20190402085219_RemoveCascadeDeleteFromList.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190402091002_InitialListSchema.cs" />
-    <Compile Remove="Data\Migrations\20190402091002_InitialListSchema.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190402093904_EnsureAutoHistory.cs" />
-    <Compile Remove="Data\Migrations\20190402093904_EnsureAutoHistory.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190404213854_AddHistoryPattern.cs" />
+    <Compile Remove="Data\Migrations\20190404213854_AddHistoryPattern.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190404214025_RevertHistoryPattern.cs" />
+    <Compile Remove="Data\Migrations\20190404214025_RevertHistoryPattern.Designer.cs" />
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
 
 </Project>

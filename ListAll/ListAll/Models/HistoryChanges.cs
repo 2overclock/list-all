@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ListAll.Data.AutoHistory
+namespace ListAll.Models
 {
     /// <summary>
     /// Represents the entity change history.

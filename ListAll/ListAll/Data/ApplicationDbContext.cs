@@ -5,23 +5,25 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using ListAll.Common;
-using ListAll.Data.AutoHistory;
 using ListAll.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ListAll.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        private const string _DeleteDate = "_DeleteDate";
+        private const string _InsertDate = "_InsertDate";
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-
+        
         public DbSet<List> List { get; set; }
 
         public DbSet<ListItem> ListItem { get; set; }
@@ -29,23 +31,23 @@ namespace ListAll.Data
         public DbSet<HistoryChanges> HistoryChanges { get; set; }
 
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                entityType.GetOrAddProperty(Constant._InsertDate, typeof(DateTime));
+                entityType.GetOrAddProperty(_InsertDate, typeof(DateTime));
 
                 // 1. Add the IsDeleted property
-                entityType.GetOrAddProperty(Constant._DeleteDate, typeof(DateTime?));
+                entityType.GetOrAddProperty(_DeleteDate, typeof(DateTime?));
 
                 // 2. Create the query filter
                 var parameter = Expression.Parameter(entityType.ClrType);
 
                 // EF.Property<bool>(entity, "_DeleteDate")
                 var propertyMethodInfo = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(DateTime?));
-                var isDeletedProperty = Expression.Call(propertyMethodInfo, parameter, Expression.Constant(Constant._DeleteDate));
+                var isDeletedProperty = Expression.Call(propertyMethodInfo, parameter, Expression.Constant(_DeleteDate));
 
                 // EF.Property<bool>(entity, "_DeleteDate") == null
                 BinaryExpression compareExpression = Expression.MakeBinary(ExpressionType.Equal, isDeletedProperty, Expression.Constant(null));
@@ -57,19 +59,6 @@ namespace ListAll.Data
             }
         }
 
-        public override EntityEntry Remove(object entity)
-        {
-            return base.Remove(entity);
-        }
-
-        #region SaveChanges
-
-        public override int SaveChanges()
-        {
-            OnBeforeSaving();
-
-            return base.SaveChanges();
-        }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -85,16 +74,12 @@ namespace ListAll.Data
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
-        //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        //{
-        //    return base.SaveChangesAsync(cancellationToken);
-        //}
 
         private void OnBeforeSaving()
         {
             foreach (var entry in ChangeTracker.Entries().Where(item => item.State == EntityState.Modified).ToArray())
             {
-                Add(entry.CreateHistoryChanges());
+                Add(CreateHistoryChanges(entry));
             }
 
             foreach (var entry in ChangeTracker.Entries())
@@ -102,18 +87,86 @@ namespace ListAll.Data
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.CurrentValues[Constant._DeleteDate] = null;
-                        entry.CurrentValues[Constant._InsertDate] = DateTime.Now;
+                        entry.CurrentValues[_DeleteDate] = null;
+                        entry.CurrentValues[_InsertDate] = DateTime.Now;
                         break;
 
                     case EntityState.Deleted:
                         entry.State = EntityState.Modified;
-                        entry.CurrentValues[Constant._DeleteDate] = DateTime.Now;
+                        entry.CurrentValues[_DeleteDate] = DateTime.Now;
                         break;
                 }
             }
         }
 
-        #endregion
+        internal HistoryChanges CreateHistoryChanges(EntityEntry entry)
+        {
+            var history = new HistoryChanges
+            {
+                TableName = entry.Metadata.Relational().TableName
+            };
+
+            var jsonSerializer = new JsonSerializer();
+
+            var json = new JObject();
+
+            var bef = new JObject();
+            var aft = new JObject();
+
+            foreach (var prop in entry.Properties)
+            {
+                if (prop.IsModified)
+                {
+                    if (prop.OriginalValue != null)
+                    {
+                        if (prop.OriginalValue != prop.CurrentValue)
+                        {
+                            bef[prop.Metadata.Name] = JToken.FromObject(prop.OriginalValue, jsonSerializer);
+                        }
+                        else
+                        {
+                            var originalValue = entry.GetDatabaseValues().GetValue<object>(prop.Metadata.Name);
+                            bef[prop.Metadata.Name] = originalValue != null
+                                ? JToken.FromObject(originalValue, jsonSerializer)
+                                : JValue.CreateNull();
+                        }
+                    }
+                    else
+                    {
+                        bef[prop.Metadata.Name] = JValue.CreateNull();
+                    }
+
+                    aft[prop.Metadata.Name] = prop.CurrentValue != null
+                        ? JToken.FromObject(prop.CurrentValue, jsonSerializer)
+                        : JValue.CreateNull();
+                }
+            }
+
+            json["before"] = bef;
+            json["after"] = aft;
+
+            history.RowId = PrimaryKey(entry);
+            history.EntityState = EntityState.Modified;
+            history.Changed = json.ToString(Formatting.None);
+
+            return history;
+        }
+
+        private string PrimaryKey(EntityEntry entry)
+        {
+            var key = entry.Metadata.FindPrimaryKey();
+
+            var values = new List<object>();
+            foreach (var property in key.Properties)
+            {
+                var value = entry.Property(property.Name).CurrentValue;
+                if (value != null)
+                {
+                    values.Add(value);
+                }
+            }
+
+            return string.Join(",", values);
+        }
     }
 }

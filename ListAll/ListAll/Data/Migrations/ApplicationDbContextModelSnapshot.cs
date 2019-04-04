@@ -19,7 +19,7 @@ namespace ListAll.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ListAll.Data.AutoHistory.HistoryChanges", b =>
+            modelBuilder.Entity("ListAll.Models.HistoryChanges", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

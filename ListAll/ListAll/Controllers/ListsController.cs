@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ListAll.Data;
 using ListAll.Models;
-using ListAll.Data.AutoHistory;
 
 namespace ListAll.Controllers
 {

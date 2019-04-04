@@ -10,16 +10,41 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListAll.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190402105616_CreateListSchema")]
+    [Migration("20190404221117_CreateListSchema")]
     partial class CreateListSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ListAll.Models.HistoryChanges", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Changed");
+
+                    b.Property<int>("EntityState");
+
+                    b.Property<string>("RowId")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("TableName")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HistoryChanges");
+                });
 
             modelBuilder.Entity("ListAll.Models.List", b =>
                 {
@@ -27,6 +52,10 @@ namespace ListAll.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -43,6 +72,10 @@ namespace ListAll.Data.Migrations
                     b.Property<Guid>("ListId");
 
                     b.Property<string>("Name");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -64,6 +97,10 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -87,6 +124,10 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired();
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
 
@@ -133,6 +174,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -159,6 +204,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired();
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -179,6 +228,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired();
 
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
+
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
@@ -191,6 +244,10 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<string>("RoleId");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -210,6 +267,10 @@ namespace ListAll.Data.Migrations
                         .HasMaxLength(128);
 
                     b.Property<string>("Value");
+
+                    b.Property<DateTime?>("_DeleteDate");
+
+                    b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
