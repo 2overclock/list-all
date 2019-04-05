@@ -30,12 +30,18 @@ namespace ListAll.Data
 
         public DbSet<HistoryChanges> HistoryChanges { get; set; }
 
+        public DbSet<LinkItem> LinkItem { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            var entityTypes = modelBuilder.Model.GetEntityTypes()
+                .Where(item => typeof(IHistoryDates).IsAssignableFrom(item.ClrType))
+                .Where(item => item.IsOwned());
+
+            foreach (var entityType in entityTypes)
             {
                 entityType.GetOrAddProperty(_InsertDate, typeof(DateTime));
 
@@ -77,12 +83,14 @@ namespace ListAll.Data
 
         private void OnBeforeSaving()
         {
-            foreach (var entry in ChangeTracker.Entries().Where(item => item.State == EntityState.Modified).ToArray())
+            var entities = ChangeTracker.Entries<IHistoryDates>();
+
+            foreach (var entry in entities.Where(item => item.State == EntityState.Modified).ToArray())
             {
                 Add(CreateHistoryChanges(entry));
             }
 
-            foreach (var entry in ChangeTracker.Entries())
+            foreach (var entry in entities)
             {
                 switch (entry.State)
                 {
@@ -147,7 +155,7 @@ namespace ListAll.Data
 
             history.RowId = PrimaryKey(entry);
             history.EntityState = EntityState.Modified;
-            history.Changed = json.ToString(Formatting.None);
+            history.Change = json.ToString(Formatting.None);
 
             return history;
         }

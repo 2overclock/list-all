@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ListAll.Models
 {
-    public class ListItem
+    public abstract class ListItem : IHistoryDates
     {
         public Guid Id { get; set; }
 
@@ -21,5 +21,8 @@ namespace ListAll.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public DateTime _InsertDate { get; set; }
+        public DateTime? _DeleteDate { get; set; }
     }
 }

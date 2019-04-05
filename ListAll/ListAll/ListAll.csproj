@@ -11,6 +11,22 @@
     <Compile Remove="Data\Migrations\20190404213854_AddHistoryPattern.Designer.cs" />
     <Compile Remove="Data\Migrations\20190404214025_RevertHistoryPattern.cs" />
     <Compile Remove="Data\Migrations\20190404214025_RevertHistoryPattern.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190404221117_CreateListSchema.cs" />
+    <Compile Remove="Data\Migrations\20190404221117_CreateListSchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405111726_CreateLinkItem.cs" />
+    <Compile Remove="Data\Migrations\20190405111726_CreateLinkItem.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405120915_CreateInsertDate.cs" />
+    <Compile Remove="Data\Migrations\20190405120915_CreateInsertDate.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405121410_UpdateHistoryChange.cs" />
+    <Compile Remove="Data\Migrations\20190405121410_UpdateHistoryChange.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405121655_UpdateBeforeSaving.cs" />
+    <Compile Remove="Data\Migrations\20190405121655_UpdateBeforeSaving.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405122017_UpdateBeforeSaving.cs" />
+    <Compile Remove="Data\Migrations\20190405122017_UpdateBeforeSaving.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405131111_UpdateModelCreating.cs" />
+    <Compile Remove="Data\Migrations\20190405131111_UpdateModelCreating.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190405144853_UpdateListItem.cs" />
+    <Compile Remove="Data\Migrations\20190405144853_UpdateListItem.Designer.cs" />
   </ItemGroup>
 
 

@@ -36,12 +36,14 @@ namespace ListAll.Models
         /// Gets or sets the json about the changing.
         /// </summary>
         /// <value>The json about the changing.</value>
-        public string Changed { get; set; }
+        public string Change { get; set; }
 
         /// <summary>
         /// Gets or sets the change kind.
         /// </summary>
         /// <value>The change kind.</value>
         public EntityState EntityState { get; set; }
+
+        public DateTime ChangeDate { get; set; } = DateTime.Now;
     }
 }
