@@ -4,14 +4,16 @@ using ListAll.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ListAll.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190405225731_CreateExpenseSchema")]
+    partial class CreateExpenseSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,15 +51,11 @@ namespace ListAll.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<Guid?>("ParentId");
-
                     b.Property<DateTime?>("_DeleteDate");
 
                     b.Property<DateTime>("_InsertDate");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("List");
                 });
@@ -274,13 +272,6 @@ namespace ListAll.Data.Migrations
                     b.Property<string>("Uri");
 
                     b.HasDiscriminator().HasValue("LinkItem");
-                });
-
-            modelBuilder.Entity("ListAll.Models.List", b =>
-                {
-                    b.HasOne("ListAll.Models.List", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("ListAll.Models.ListItem", b =>

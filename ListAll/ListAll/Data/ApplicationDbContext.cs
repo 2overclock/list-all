@@ -32,6 +32,8 @@ namespace ListAll.Data
 
         public DbSet<LinkItem> LinkItem { get; set; }
 
+        public DbSet<ExpenseItem> ExpenseItem { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -10,23 +10,23 @@ using ListAll.Models;
 
 namespace ListAll.Controllers
 {
-    public class ListsController : Controller
+    public class ExpenseItemsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ListsController(ApplicationDbContext context)
+        public ExpenseItemsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Lists
+        // GET: ExpenseItems
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.List.Include(l => l.Parent);
+            var applicationDbContext = _context.ExpenseItem.Include(e => e.List);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Lists/Details/5
+        // GET: ExpenseItems/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -34,43 +34,43 @@ namespace ListAll.Controllers
                 return NotFound();
             }
 
-            var list = await _context.List
-                .Include(l => l.Parent)
+            var expenseItem = await _context.ExpenseItem
+                .Include(e => e.List)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (list == null)
+            if (expenseItem == null)
             {
                 return NotFound();
             }
 
-            return View(list);
+            return View(expenseItem);
         }
 
-        // GET: Lists/Create
+        // GET: ExpenseItems/Create
         public IActionResult Create()
         {
-            ViewData["ParentId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name));
+            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name));
             return View();
         }
 
-        // POST: Lists/Create
+        // POST: ExpenseItems/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ParentId,Name")] List list)
+        public async Task<IActionResult> Create([Bind("Amount,ExpenseDate,Id,ListId,Name,Description")] ExpenseItem expenseItem)
         {
             if (ModelState.IsValid)
             {
-                list.Id = Guid.NewGuid();
-                _context.Add(list);
+                expenseItem.Id = Guid.NewGuid();
+                _context.Add(expenseItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), list.ParentId);
-            return View(list);
+            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), expenseItem.ListId);
+            return View(expenseItem);
         }
 
-        // GET: Lists/Edit/5
+        // GET: ExpenseItems/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -78,23 +78,23 @@ namespace ListAll.Controllers
                 return NotFound();
             }
 
-            var list = await _context.List.FindAsync(id);
-            if (list == null)
+            var expenseItem = await _context.ExpenseItem.FindAsync(id);
+            if (expenseItem == null)
             {
                 return NotFound();
             }
-            ViewData["ParentId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), list.ParentId);
-            return View(list);
+            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), expenseItem.ListId);
+            return View(expenseItem);
         }
 
-        // POST: Lists/Edit/5
+        // POST: ExpenseItems/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,ParentId,Name")] List list)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Amount,ExpenseDate,Id,ListId,Name,Description")] ExpenseItem expenseItem)
         {
-            if (id != list.Id)
+            if (id != expenseItem.Id)
             {
                 return NotFound();
             }
@@ -103,12 +103,12 @@ namespace ListAll.Controllers
             {
                 try
                 {
-                    _context.Update(list);
+                    _context.Update(expenseItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ListExists(list.Id))
+                    if (!ExpenseItemExists(expenseItem.Id))
                     {
                         return NotFound();
                     }
@@ -119,11 +119,11 @@ namespace ListAll.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), list.ParentId);
-            return View(list);
+            ViewData["ListId"] = new SelectList(_context.List, nameof(List.Id), nameof(List.Name), expenseItem.ListId);
+            return View(expenseItem);
         }
 
-        // GET: Lists/Delete/5
+        // GET: ExpenseItems/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -131,31 +131,31 @@ namespace ListAll.Controllers
                 return NotFound();
             }
 
-            var list = await _context.List
-                .Include(l => l.Parent)
+            var expenseItem = await _context.ExpenseItem
+                .Include(e => e.List)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (list == null)
+            if (expenseItem == null)
             {
                 return NotFound();
             }
 
-            return View(list);
+            return View(expenseItem);
         }
 
-        // POST: Lists/Delete/5
+        // POST: ExpenseItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var list = await _context.List.FindAsync(id);
-            _context.List.Remove(list);
+            var expenseItem = await _context.ExpenseItem.FindAsync(id);
+            _context.ExpenseItem.Remove(expenseItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ListExists(Guid id)
+        private bool ExpenseItemExists(Guid id)
         {
-            return _context.List.Any(e => e.Id == id);
+            return _context.ExpenseItem.Any(e => e.Id == id);
         }
     }
 }
